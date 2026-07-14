@@ -68,7 +68,7 @@ El repositorio está organizado de la siguiente manera:
 │   └── schema.sql            # Script DDL para creación de tablas e inserción de datos de prueba
 │
 ├── descripcion_proyecto.pdf  # Manual descriptivo del sistema
-└── query-hiraoka.txt         # Copia del script SQL para la base de datos
+└── query-hiraoka.sql         # Copia del script SQL para la base de datos
 ```
 
 ---
@@ -91,7 +91,11 @@ Siga los siguientes pasos para poner en marcha el proyecto localmente:
 
 ### Paso 1: Configurar la Base de Datos (MySQL)
 1. Inicie su servidor MySQL local.
-2. Ejecute el script SQL ubicado en [database/schema.sql](file:///home/user/Downloads/PLATAFORMA%20SISTEMAS%20DE%20INFORMACION%20EMPRESARIAL/project/database/schema.sql) o en [query-hiraoka.txt](file:///home/user/Downloads/PLATAFORMA%20SISTEMAS%20DE%20INFORMACION%20EMPRESARIAL/project/query-hiraoka.txt). Esto creará la base de datos `hiraoka_inventario`, las tablas necesarias y cargará los datos de prueba iniciales.
+2. Ejecute el script SQL ubicado en `/database/schema.sql` o en directorio principal `query-hiraoka.sql`. 
+```
+mysql -u root -p hiraoka_inventario < query-hiraoka.sql
+```
+Esto creará la base de datos `hiraoka_inventario`, las tablas necesarias y cargará los datos de prueba iniciales.
 
 ### Paso 2: Configurar las Variables de Entorno del Backend
 1. Diríjase a la carpeta `backend`.
@@ -101,7 +105,7 @@ Siga los siguientes pasos para poner en marcha el proyecto localmente:
    DB_USER=tu_usuario_mysql
    DB_PASSWORD=tu_contraseña_mysql
    DB_NAME=hiraoka_inventario
-   PORT=5000
+   
    ```
 
 ### Paso 3: Iniciar el Servidor Backend
