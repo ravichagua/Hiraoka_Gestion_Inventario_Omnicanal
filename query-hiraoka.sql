@@ -57,7 +57,18 @@ CREATE TABLE Garantias_Series (
     UNIQUE KEY unique_serie (numero_serie)
 );
 
+-- Tabla Usuarios
+CREATE TABLE Usuarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
+
 -- ===== DATOS DE PRUEBA =====
+-- Usuarios
+INSERT INTO Usuarios (usuario, password) VALUES
+('admin', 'admin123');
+
 -- Tiendas (coinciden con los nombres usados en el frontend)
 INSERT INTO Tiendas (nombre, direccion, tipo) VALUES
 ('Centro Lima', 'Av. Abancay 500', 'fisica'),

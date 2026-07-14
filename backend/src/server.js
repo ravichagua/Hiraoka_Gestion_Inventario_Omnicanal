@@ -2,8 +2,9 @@ const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
 
-// Importar el controlador de inventario
+// Importar el controlador de inventario y autenticación
 const inventoryController = require('./controllers/inventory.controller');
+const authController = require('./controllers/auth.controller');
 
 const app = express();
 
@@ -15,6 +16,9 @@ app.use(express.json());
 app.get('/api/prueba', (req, res) => {
     res.json({ mensaje: "¡El backend de Hiraoka está vivo y funcionando! 🚀" });
 });
+
+// ===== ENDPOINT DE AUTENTICACIÓN =====
+app.post('/api/login', authController.login);
 
 // ===== ENDPOINTS DEL SISTEMA DE INVENTARIO =====
 // Obtener stock total (todas las tiendas) - usado por DashboardInventario

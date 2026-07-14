@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ModalMovimiento from './ModalMovimiento';
 import { RefreshCw, AlertTriangle, Package, Store } from 'lucide-react';
 
-const DashboardInventario = () => {
+const DashboardInventario = ({ usuario }) => {
   const [stockData, setStockData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -180,6 +180,7 @@ const DashboardInventario = () => {
           producto={selectedProduct}
           onClose={handleCloseModal}
           onSuccess={fetchStock}
+          usuario={usuario}
         />
       )}
     </div>

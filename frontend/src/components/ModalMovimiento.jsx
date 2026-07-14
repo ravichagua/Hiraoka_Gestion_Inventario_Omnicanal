@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { X, Package, AlertCircle } from 'lucide-react';
 
-const ModalMovimiento = ({ producto, onClose, onSuccess }) => {
+const ModalMovimiento = ({ producto, onClose, onSuccess, usuario }) => {
   const [tipo, setTipo] = useState('ENTRADA');
   const [cantidad, setCantidad] = useState(1);
   const [numeroSerie, setNumeroSerie] = useState('');
@@ -32,7 +32,7 @@ const ModalMovimiento = ({ producto, onClose, onSuccess }) => {
       producto_id: producto.id,
       tipo,
       cantidad: parseInt(cantidad, 10),
-      usuario: 'vendedor'
+      usuario: usuario || 'vendedor'
     };
 
     try {
