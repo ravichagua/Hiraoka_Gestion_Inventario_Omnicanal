@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { X, Package, AlertCircle } from 'lucide-react';
+import { API_BASE_URL } from '../config';
 
 const ModalMovimiento = ({ producto, onClose, onSuccess, usuario }) => {
   const [tipo, setTipo] = useState('ENTRADA');
@@ -36,7 +37,7 @@ const ModalMovimiento = ({ producto, onClose, onSuccess, usuario }) => {
     };
 
     try {
-      const response = await fetch('http://localhost:5000/api/movimiento', {
+      const response = await fetch(`${API_BASE_URL}/api/movimiento`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)

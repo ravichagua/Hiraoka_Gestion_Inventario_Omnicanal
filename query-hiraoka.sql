@@ -98,3 +98,77 @@ INSERT INTO Movimientos (tienda_id, producto_id, tipo, cantidad, usuario) VALUES
 INSERT INTO Garantias_Series (producto_id, numero_serie, tienda_venta_id, fecha_venta, estado) VALUES
 (1,'SN-LP001',1,'2026-01-15','activa'),
 (2,'SN-TV002',2,'2026-02-20','activa');
+
+
+INSERT INTO Productos (sku, nombre, descripcion, stock_minimo, precio) VALUES
+('SKU004', 'Smartphone Samsung Galaxy S24', 'Pantalla Dynamic AMOLED 2X 6.2", 256GB, 8GB RAM', 4, 3999.00),
+('SKU005', 'PlayStation 5 Slim', 'Consola de 1TB SSD con lector de discos, Control DualSense', 3, 2499.00),
+('SKU006', 'Refrigeradora Samsung 400L', 'No Frost con tecnología Digital Inverter y despachador de agua', 2, 2199.00),
+('SKU007', 'Lavadora LG 18kg', 'Motor Smart Inverter, Tambor de acero inoxidable, Carga superior', 2, 1699.00),
+('SKU008', 'Freidora de Aire Oster 4L', 'Control de temperatura ajustable, revestimiento antiadherente', 8, 329.00),
+('SKU009', 'Impresora Multifuncional Epson EcoTank L3250', 'Conectividad Wi-Fi, impresión sin cartuchos de alta capacidad', 5, 849.00),
+('SKU010', 'Nintendo Switch OLED', 'Consola híbrida con pantalla OLED de 7", 64GB de almacenamiento', 4, 1599.00);
+
+-- 2. Insertar inventario inicial (stock en cada tienda) para los nuevos productos
+-- Las tiendas son: 1 (Centro Lima), 2 (Miraflores), 3 (San Miguel), 4 (Independencia), 5 (E-commerce)
+
+-- Stock para SKU004 (Smartphone Samsung Galaxy S24)
+INSERT INTO Inventario_Local (tienda_id, producto_id, cantidad) VALUES
+(1, (SELECT id FROM Productos WHERE sku = 'SKU004'), 8),
+(2, (SELECT id FROM Productos WHERE sku = 'SKU004'), 12),
+(3, (SELECT id FROM Productos WHERE sku = 'SKU004'), 6),
+(4, (SELECT id FROM Productos WHERE sku = 'SKU004'), 4),
+(5, (SELECT id FROM Productos WHERE sku = 'SKU004'), 15);
+
+-- Stock para SKU005 (PlayStation 5 Slim)
+INSERT INTO Inventario_Local (tienda_id, producto_id, cantidad) VALUES
+(1, (SELECT id FROM Productos WHERE sku = 'SKU005'), 5),
+(2, (SELECT id FROM Productos WHERE sku = 'SKU005'), 7),
+(3, (SELECT id FROM Productos WHERE sku = 'SKU005'), 4),
+(4, (SELECT id FROM Productos WHERE sku = 'SKU005'), 2),
+(5, (SELECT id FROM Productos WHERE sku = 'SKU005'), 10);
+
+-- Stock para SKU006 (Refrigeradora Samsung 400L)
+INSERT INTO Inventario_Local (tienda_id, producto_id, cantidad) VALUES
+(1, (SELECT id FROM Productos WHERE sku = 'SKU006'), 3),
+(2, (SELECT id FROM Productos WHERE sku = 'SKU006'), 2),
+(3, (SELECT id FROM Productos WHERE sku = 'SKU006'), 2),
+(4, (SELECT id FROM Productos WHERE sku = 'SKU006'), 1),
+(5, (SELECT id FROM Productos WHERE sku = 'SKU006'), 5);
+
+-- Stock para SKU007 (Lavadora LG 18kg)
+INSERT INTO Inventario_Local (tienda_id, producto_id, cantidad) VALUES
+(1, (SELECT id FROM Productos WHERE sku = 'SKU007'), 4),
+(2, (SELECT id FROM Productos WHERE sku = 'SKU007'), 3),
+(3, (SELECT id FROM Productos WHERE sku = 'SKU007'), 2),
+(4, (SELECT id FROM Productos WHERE sku = 'SKU007'), 2),
+(5, (SELECT id FROM Productos WHERE sku = 'SKU007'), 4);
+
+-- Stock para SKU008 (Freidora de Aire Oster 4L)
+INSERT INTO Inventario_Local (tienda_id, producto_id, cantidad) VALUES
+(1, (SELECT id FROM Productos WHERE sku = 'SKU008'), 20),
+(2, (SELECT id FROM Productos WHERE sku = 'SKU008'), 15),
+(3, (SELECT id FROM Productos WHERE sku = 'SKU008'), 18),
+(4, (SELECT id FROM Productos WHERE sku = 'SKU008'), 12),
+(5, (SELECT id FROM Productos WHERE sku = 'SKU008'), 30);
+
+-- Stock para SKU009 (Impresora Epson EcoTank L3250)
+INSERT INTO Inventario_Local (tienda_id, producto_id, cantidad) VALUES
+(1, (SELECT id FROM Productos WHERE sku = 'SKU009'), 12),
+(2, (SELECT id FROM Productos WHERE sku = 'SKU009'), 10),
+(3, (SELECT id FROM Productos WHERE sku = 'SKU009'), 8),
+(4, (SELECT id FROM Productos WHERE sku = 'SKU009'), 5),
+(5, (SELECT id FROM Productos WHERE sku = 'SKU009'), 25);
+
+-- Stock para SKU010 (Nintendo Switch OLED)
+INSERT INTO Inventario_Local (tienda_id, producto_id, cantidad) VALUES
+(1, (SELECT id FROM Productos WHERE sku = 'SKU010'), 7),
+(2, (SELECT id FROM Productos WHERE sku = 'SKU010'), 9),
+(3, (SELECT id FROM Productos WHERE sku = 'SKU010'), 6),
+(4, (SELECT id FROM Productos WHERE sku = 'SKU010'), 4),
+(5, (SELECT id FROM Productos WHERE sku = 'SKU010'), 12);
+
+-- 3. Insertar registros de ejemplo de Garantías / Series para algunos de los nuevos productos
+INSERT INTO Garantias_Series (producto_id, numero_serie, tienda_venta_id, fecha_venta, estado) VALUES
+((SELECT id FROM Productos WHERE sku = 'SKU004'), 'SN-SP004', 2, '2026-03-10', 'activa'),
+((SELECT id FROM Productos WHERE sku = 'SKU005'), 'SN-PS005', 3, '2026-04-05', 'activa');

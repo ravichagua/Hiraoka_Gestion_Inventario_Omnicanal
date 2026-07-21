@@ -35,7 +35,7 @@ app.post('/api/movimiento', inventoryController.registrarMovimiento);
 
 // Encender servidor
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
     console.log(`==================================================`);
     console.log(`🚀 Servidor corriendo con éxito en el puerto ${PORT}`);
     console.log(`==================================================`);
