@@ -33,6 +33,15 @@ app.get('/api/disponibilidad/:productoId', inventoryController.getCrossAvailabil
 // Registrar movimiento (entrada/salida) - usado por ModalMovimiento
 app.post('/api/movimiento', inventoryController.registrarMovimiento);
 
+// Obtener historial de movimientos
+app.get('/api/movimientos', inventoryController.getMovimientos);
+
+// Registrar transferencia de stock entre tiendas
+app.post('/api/transferencia', inventoryController.registrarTransferencia);
+
+// Registrar un nuevo producto en catálogo
+app.post('/api/productos', inventoryController.registrarProducto);
+
 // Encender servidor
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, '0.0.0.0', () => {

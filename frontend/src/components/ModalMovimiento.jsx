@@ -7,6 +7,7 @@ const ModalMovimiento = ({ producto, onClose, onSuccess, usuario }) => {
   const [cantidad, setCantidad] = useState(1);
   const [numeroSerie, setNumeroSerie] = useState('');
   const [tiendaId, setTiendaId] = useState(1);
+  const [tiendaDestinoId, setTiendaDestinoId] = useState(2);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -23,12 +24,24 @@ const ModalMovimiento = ({ producto, onClose, onSuccess, usuario }) => {
     setError('');
 
     if (tipo === 'SALIDA' && !numeroSerie.trim()) {
-      setError('El número de serie es obligatorio para salidas.');
+      setError('El número de serie es obligatorio para registrar salidas.');
+      return;
+    }
+
+    if (tipo === 'TRANSFERENCIA' && tiendaId === tiendaDestinoId) {
+      setError('La tienda origen y destino deben ser diferentes.');
+      return;
+    }
+
+    if (parseInt(cantidad, 10) <= 0) {
+      setError('La cantidad debe ser de al menos 1 unidad.');
       return;
     }
 
     setLoading(true);
-    const payload = {
+    
+    let url = `${API_BASE_URL}/api/movimiento`;
+    let payload = {
       tienda_id: tiendaId,
       producto_id: producto.id,
       tipo,
@@ -36,8 +49,23 @@ const ModalMovimiento = ({ producto, onClose, onSuccess, usuario }) => {
       usuario: usuario || 'vendedor'
     };
 
+    if (tipo === 'SALIDA') {
+      payload.numero_serie = numeroSerie.trim();
+    }
+
+    if (tipo === 'TRANSFERENCIA') {
+      url = `${API_BASE_URL}/api/transferencia`;
+      payload = {
+        tienda_origen_id: tiendaId,
+        tienda_destino_id: tiendaDestinoId,
+        producto_id: producto.id,
+        cantidad: parseInt(cantidad, 10),
+        usuario: usuario || 'vendedor'
+      };
+    }
+
     try {
-      const response = await fetch(`${API_BASE_URL}/api/movimiento`, {
+      const response = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
@@ -45,12 +73,12 @@ const ModalMovimiento = ({ producto, onClose, onSuccess, usuario }) => {
       const result = await response.json();
       if (result.success) {
         if (result.alerta) {
-          alert(`⚠️ ${result.alerta}`);
+          alert(`⚠️ Alerta de Inventario:\n\n${result.alerta}`);
         }
         onSuccess();
         onClose();
       } else {
-        setError(result.error || 'Error al registrar movimiento');
+        setError(result.error || 'Error al procesar movimiento');
       }
     } catch (err) {
       setError('Error de conexión con el servidor');
@@ -60,45 +88,45 @@ const ModalMovimiento = ({ producto, onClose, onSuccess, usuario }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 transition-all duration-300">
+      <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-2xl w-full max-w-md max-h-[92vh] overflow-y-auto border border-slate-100 dark:border-slate-800/80 animate-scaleUp">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200">
-          <div className="flex items-center space-x-2">
-            <Package className="w-5 h-5 text-blue-600" />
-            <h2 className="text-xl font-bold text-gray-800">Registrar Movimiento</h2>
+        <div className="flex items-center justify-between p-6 border-b border-slate-100 dark:border-slate-800/50">
+          <div className="flex items-center space-x-2.5">
+            <Package className="w-5.5 h-5.5 text-red-600 dark:text-red-400" />
+            <h2 className="text-lg font-black text-slate-900 dark:text-white">Registrar Movimiento</h2>
           </div>
           <button
             onClick={onClose}
-            className="p-1 hover:bg-gray-100 rounded-full transition"
+            className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl text-slate-500 hover:text-slate-700 dark:hover:text-slate-350 transition duration-150"
           >
-            <X className="w-5 h-5 text-gray-500" />
+            <X className="w-4.5 h-4.5" />
           </button>
         </div>
 
         {/* Body */}
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
-          <div>
-            <p className="text-sm text-gray-500">
-              Producto: <span className="font-semibold text-gray-800">{producto.nombre}</span>
-            </p>
-            <p className="text-xs text-gray-400">SKU: {producto.sku}</p>
+          <div className="bg-slate-50 dark:bg-slate-950/40 p-4 rounded-2xl border border-slate-100 dark:border-slate-800/30">
+            <p className="text-xs text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider">Producto</p>
+            <h3 className="font-bold text-slate-800 dark:text-slate-200 text-sm mt-0.5">{producto.nombre}</h3>
+            <p className="text-[10px] font-mono font-semibold text-slate-500 mt-0.5">SKU: {producto.sku}</p>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Tipo</label>
+            <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Tipo de Transacción</label>
             <select
               value={tipo}
               onChange={(e) => setTipo(e.target.value)}
-              className="input-field"
+              className="input-field py-2.5 bg-white dark:bg-slate-950 font-medium"
             >
-              <option value="ENTRADA">Entrada</option>
-              <option value="SALIDA">Salida</option>
+              <option value="ENTRADA">📥 Entrada de Stock (Abastecimiento)</option>
+              <option value="SALIDA">📤 Salida / Venta (Salida de Tienda)</option>
+              <option value="TRANSFERENCIA">🔄 Transferencia entre Tiendas</option>
             </select>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Cantidad</label>
+            <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Cantidad</label>
             <input
               type="number"
               min="1"
@@ -109,65 +137,95 @@ const ModalMovimiento = ({ producto, onClose, onSuccess, usuario }) => {
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Tienda</label>
-            <select
-              value={tiendaId}
-              onChange={(e) => setTiendaId(parseInt(e.target.value, 10))}
-              className="input-field"
-            >
-              {tiendas.map((t) => (
-                <option key={t.id} value={t.id}>{t.nombre}</option>
-              ))}
-            </select>
-          </div>
+          {/* Tienda selectors (Conditional) */}
+          {tipo === 'TRANSFERENCIA' ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Tienda Origen</label>
+                <select
+                  value={tiendaId}
+                  onChange={(e) => setTiendaId(parseInt(e.target.value, 10))}
+                  className="input-field py-2.5 bg-white dark:bg-slate-950 text-xs font-semibold"
+                >
+                  {tiendas.map((t) => (
+                    <option key={t.id} value={t.id}>{t.nombre}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Tienda Destino</label>
+                <select
+                  value={tiendaDestinoId}
+                  onChange={(e) => setTiendaDestinoId(parseInt(e.target.value, 10))}
+                  className="input-field py-2.5 bg-white dark:bg-slate-950 text-xs font-semibold"
+                >
+                  {tiendas.map((t) => (
+                    <option key={t.id} value={t.id} disabled={t.id === tiendaId}>{t.nombre}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          ) : (
+            <div>
+              <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Tienda</label>
+              <select
+                value={tiendaId}
+                onChange={(e) => setTiendaId(parseInt(e.target.value, 10))}
+                className="input-field py-2.5 bg-white dark:bg-slate-950 font-semibold text-xs"
+              >
+                {tiendas.map((t) => (
+                  <option key={t.id} value={t.id}>{t.nombre}</option>
+                ))}
+              </select>
+            </div>
+          )}
 
           {tipo === 'SALIDA' && (
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Número de Serie <span className="text-red-500">*</span>
+            <div className="animate-slideDown">
+              <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">
+                Número de Serie <span className="text-red-500 font-bold">*</span>
               </label>
               <input
                 type="text"
                 value={numeroSerie}
                 onChange={(e) => setNumeroSerie(e.target.value)}
-                placeholder="Ej: SN-123456"
-                className="input-field"
+                placeholder="Ej: SN-LP999"
+                className="input-field font-mono"
                 required
               />
-              <p className="text-xs text-gray-400 mt-1">
-                Obligatorio para registrar garantía.
+              <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-1 font-semibold">
+                Este serial se vinculará para la validación de la garantía.
               </p>
             </div>
           )}
 
           {error && (
-            <div className="flex items-center p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
-              <AlertCircle className="w-4 h-4 mr-2 flex-shrink-0" />
-              {error}
+            <div className="flex items-center p-3.5 bg-rose-50 dark:bg-rose-950/20 border border-rose-200 dark:border-rose-900/30 rounded-2xl text-rose-700 dark:text-rose-400 text-xs font-semibold">
+              <AlertCircle className="w-4.5 h-4.5 mr-2 flex-shrink-0" />
+              <span>{error}</span>
             </div>
           )}
 
-          <div className="flex justify-end space-x-3 pt-4 border-t border-gray-200">
+          <div className="flex justify-end space-x-3 pt-4 border-t border-slate-100 dark:border-slate-800/50">
             <button
               type="button"
               onClick={onClose}
-              className="btn-secondary"
+              className="btn-secondary text-xs"
             >
               Cancelar
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="btn-primary flex items-center"
+              className="btn-primary text-xs"
             >
               {loading ? (
                 <>
-                  <span className="animate-spin mr-2">⟳</span>
+                  <span className="animate-spin mr-1.5">⟳</span>
                   Procesando...
                 </>
               ) : (
-                'Registrar'
+                'Registrar Movimiento'
               )}
             </button>
           </div>

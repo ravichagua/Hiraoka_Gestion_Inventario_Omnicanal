@@ -37,62 +37,62 @@ const Login = ({ onLoginSuccess }) => {
   };
 
   return (
-    <div className="min-h-[70vh] flex items-center justify-center px-4 py-8">
-      <div className="max-w-md w-full bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
-        <div className="p-8">
+    <div className="min-h-[75vh] flex items-center justify-center px-4 py-8">
+      <div className="max-w-md w-full bg-white dark:bg-slate-900 rounded-3xl shadow-xl shadow-slate-100/50 dark:shadow-none border border-slate-150 dark:border-slate-800/80 overflow-hidden transition-all duration-300">
+        <div className="p-8 sm:p-10">
           <div className="flex flex-col items-center mb-8">
-            <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center text-white font-extrabold text-3xl shadow-md mb-4">
+            <div className="w-16 h-16 bg-gradient-to-br from-red-600 to-rose-600 rounded-2xl flex items-center justify-center text-white font-extrabold text-3xl shadow-lg shadow-red-500/25 mb-4 active:scale-95 transition-transform duration-200">
               H
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 tracking-tight text-center">
+            <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight text-center">
               Importaciones Hiraoka
             </h2>
-            <p className="text-sm text-gray-500 font-medium tracking-wider uppercase mt-1">
+            <p className="text-[10px] text-slate-500 dark:text-slate-400 font-bold tracking-wider uppercase mt-1">
               Acceso Administrativo
             </p>
           </div>
 
           {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm flex items-center gap-3">
+            <div className="mb-6 p-4 bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/30 rounded-2xl text-red-700 dark:text-red-400 text-sm flex items-center gap-3">
               <AlertCircle className="w-5 h-5 flex-shrink-0" />
-              <span>{error}</span>
+              <span className="font-medium">{error}</span>
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
+              <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">
                 Usuario
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                  <User className="w-5 h-5" />
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 dark:text-slate-500">
+                  <User className="w-4.5 h-4.5" />
                 </div>
                 <input
                   type="text"
                   required
                   value={usuario}
                   onChange={(e) => setUsuario(e.target.value)}
-                  className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 text-sm placeholder-gray-400"
+                  className="input-field pl-10"
                   placeholder="Ingrese su usuario"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
+              <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">
                 Contraseña
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                  <Lock className="w-5 h-5" />
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 dark:text-slate-500">
+                  <Lock className="w-4.5 h-4.5" />
                 </div>
                 <input
                   type="password"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 text-sm placeholder-gray-400"
+                  className="input-field pl-10"
                   placeholder="••••••••"
                 />
               </div>
@@ -101,7 +101,7 @@ const Login = ({ onLoginSuccess }) => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full btn-primary py-3 rounded-xl flex items-center justify-center text-base font-semibold shadow-lg hover:shadow-xl transition-all duration-200 active:scale-[0.98] disabled:opacity-50"
+              className="w-full btn-primary py-3 rounded-xl flex items-center justify-center text-sm font-bold shadow-lg hover:shadow-xl transition-all duration-200 active:scale-[0.98] disabled:opacity-50 mt-2"
             >
               {loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
             </button>

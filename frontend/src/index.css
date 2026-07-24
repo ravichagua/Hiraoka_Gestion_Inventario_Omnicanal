@@ -2,32 +2,65 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Estilos globales para un diseño profesional */
 @layer base {
   body {
-    @apply bg-gray-50 text-gray-800 antialiased;
+    @apply bg-slate-50 text-slate-800 antialiased;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
   }
 
-  h1, h2, h3 {
-    @apply font-bold tracking-tight;
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold tracking-tight text-slate-900;
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200 shadow-sm hover:shadow-md;
+    @apply bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white font-semibold py-2 px-5 rounded-xl transition duration-200 shadow-md shadow-red-500/10 hover:shadow-lg hover:shadow-red-500/20 active:scale-[0.98] flex items-center justify-center gap-2;
   }
 
   .btn-secondary {
-    @apply bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-lg transition duration-200;
+    @apply bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-2 px-5 rounded-xl transition duration-200 active:scale-[0.98] flex items-center justify-center gap-2 border border-slate-200/50;
   }
 
   .card {
-    @apply bg-white rounded-xl shadow-md overflow-hidden border border-gray-100;
+    @apply bg-white rounded-2xl shadow-sm border border-slate-200/60 overflow-hidden transition-all duration-300;
   }
 
-  .table-header {
-    @apply bg-gray-100 text-gray-700 uppercase text-xs font-semibold tracking-wider;
+  .input-field {
+    @apply w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500 text-slate-900 placeholder-slate-400 text-sm transition-all duration-200;
   }
+
+  .badge-stock {
+    @apply inline-flex items-center justify-center px-2.5 py-1 rounded-full text-xs font-bold font-mono min-w-[38px] transition-all duration-200;
+  }
+
+  .badge-stock-alto {
+    @apply bg-emerald-50 text-emerald-700 border border-emerald-200/50;
+  }
+
+  .badge-stock-bajo {
+    @apply bg-amber-50 text-amber-700 border border-amber-200/50 animate-pulse;
+  }
+
+  .badge-stock-critico {
+    @apply bg-rose-50 text-rose-700 border border-rose-200/50 font-extrabold;
+  }
+
+  .glass-panel {
+    @apply bg-white/80 backdrop-blur-md border-b border-slate-200/80;
+  }
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-200 rounded-full hover:bg-slate-300;
 }
